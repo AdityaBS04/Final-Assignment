@@ -2,13 +2,14 @@ const dynamoDb = require("../config/dynamoDbConfig");
 const { hashPassword, comparePassword } = require("../utils/hashUtils");
 const jwt = require("jsonwebtoken");
 
+
 const signup = async (req, res) => {
   const { name, email, password, role } = req.body;
 
   try {
     // Check if user already exists
     const params = {
-      TableName: process.env.TABLE_NAME,
+      TableName: process.env.TABLE_NAME_USERS,
       Key: { email },
     };
 
@@ -29,7 +30,7 @@ const signup = async (req, res) => {
     };
 
     const saveParams = {
-      TableName: process.env.TABLE_NAME,
+      TableName: process.env.TABLE_NAME_USERS,
       Item: newUser,
     };
 
@@ -48,7 +49,7 @@ const login = async (req, res) => {
   try {
     // Check if user exists
     const params = {
-      TableName: process.env.TABLE_NAME,
+      TableName: process.env.TABLE_NAME_USERS,
       Key: { email },
     };
 
