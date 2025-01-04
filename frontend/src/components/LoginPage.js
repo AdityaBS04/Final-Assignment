@@ -38,7 +38,7 @@ const Login = () => {
         // Save token or navigate based on role
         if (formData.role === "admin") navigate("/admin-home");
         else if (formData.role === "seller") navigate("/seller-home");
-        else navigate("/buyer-home");
+        else navigate("/buyer");
       } else {
         setError(data.message || "Login failed");
       }

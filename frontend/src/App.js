@@ -30,7 +30,7 @@ const App = () => {
         <Route path="/seller-profile" element={<SellerProfile />} />
 
         {/* Buyer Dashboard Pages */}
-        <Route path="/buyer-home" element={<BuyerHome />} />
+        <Route path="/buyer" element={<BuyerHome />} />
         <Route path="/buyer-profile" element={<BuyerProfile />} />
       </Routes>
     </Router>
