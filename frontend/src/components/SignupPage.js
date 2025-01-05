@@ -8,7 +8,6 @@ const Signup = () => {
     email: "",
     password: "",
     confirmPassword: "",
-    role: "buyer", // Default role
   });
 
   const [error, setError] = useState("");
@@ -33,7 +32,7 @@ const Signup = () => {
           name: formData.name,
           email: formData.email,
           password: formData.password,
-          role: formData.role,
+          role: "buyer", // Automatically set role to 'buyer'
         }),
       });
 
@@ -88,10 +87,6 @@ const Signup = () => {
           onChange={handleChange}
           required
         />
-        <select name="role" value={formData.role} onChange={handleChange}>
-          <option value="buyer">Buyer</option>
-          <option value="seller">Seller</option>
-        </select>
         <button type="submit">Sign Up</button>
       </form>
     </div>

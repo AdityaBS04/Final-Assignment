@@ -6,7 +6,7 @@ const Login = () => {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
-    role: "buyer", // Default role
+    role: "buyer", // Default role set to Buyer
   });
 
   const [error, setError] = useState("");
@@ -26,7 +26,7 @@ const Login = () => {
         body: JSON.stringify({
           email: formData.email,
           password: formData.password,
-          role: formData.role,
+          role: formData.role, // Role is sent based on user selection
         }),
       });
 
@@ -35,9 +35,8 @@ const Login = () => {
       if (response.ok) {
         alert(data.message);
 
-        // Save token or navigate based on role
+        // Navigate based on role (admin or buyer)
         if (formData.role === "admin") navigate("/admin-home");
-        else if (formData.role === "seller") navigate("/seller-home");
         else navigate("/buyer");
       } else {
         setError(data.message || "Login failed");
@@ -71,7 +70,6 @@ const Login = () => {
         />
         <select name="role" value={formData.role} onChange={handleChange}>
           <option value="buyer">Buyer</option>
-          <option value="seller">Seller</option>
           <option value="admin">Admin</option>
         </select>
         <button type="submit">Log In</button>
