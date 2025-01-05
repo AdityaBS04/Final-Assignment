@@ -2,38 +2,48 @@ import React, { useState } from "react";
 import axios from "axios";
 
 const AdminHome = () => {
-  const [Semester, setSemester] = useState(""); // Kept as `Semester`
-  const [SubjectId, setSubjectId] = useState(""); // Kept as `SubjectId`
+  const [Semester, setSemester] = useState("");
+  const [SubjectId, setSubjectId] = useState("");
   const [assignment, setAssignment] = useState("");
   const [price, setPrice] = useState("");
+  const [file, setFile] = useState(null);
 
   const handleAddAssignment = async () => {
-    if (!Semester || !SubjectId || !assignment || !price) {
-      alert("All fields are required.");
+    if (!Semester || !SubjectId || !assignment || !price || !file) {
+      alert("All fields and a file are required.");
       return;
     }
 
-    const requestData = { Semester, SubjectId, assignment, price };
-
-    console.log("Sending request data:", requestData);
-
     try {
+      const formData = new FormData();
+      formData.append("Semester", Semester);
+      formData.append("SubjectId", SubjectId);
+      formData.append("assignment", assignment);
+      formData.append("price", price);
+      formData.append("file", file);
+
       const response = await axios.post(
         "http://localhost:5000/api/admin/add-assignment",
-        requestData
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
       );
-      console.log("Response from server:", response.data);
+
       alert(response.data.message);
       setSemester("");
       setSubjectId("");
       setAssignment("");
       setPrice("");
+      setFile(null);
     } catch (error) {
       console.error(
         "Error adding assignment:",
         error.response ? error.response.data : error.message
       );
-      alert(error.response?.data?.error || "Failed to add assignment.");
+      alert(error.response?.data?.message || "Failed to add assignment.");
     }
   };
 
@@ -58,51 +68,7 @@ const AdminHome = () => {
           onChange={(e) => setSubjectId(e.target.value)}
         >
           <option value="">Select Subject</option>
-          {Semester === "1" && (
-            <>
-              <option value="Maths1">Maths1</option>
-              <option value="EPD">EPD</option>
-              <option value="Mechanics">Mechanical</option>
-              <option value="Python">Python</option>
-              <option value="Physics">Physics</option>
-            </>
-          )}
-          {Semester === "2" && (
-            <>
-              <option value="Maths2">Maths2</option>
-              <option value="EEE">EEE</option>
-              <option value="Mechanical">Mechanical</option>
-              <option value="C">C</option>
-              <option value="Chemistry">Chemistry</option>
-            </>
-          )}
-          {Semester === "3" && (
-            <>
-              <option value="Statistics">SDS</option>
-              <option value="Automata and Formal Language">Automata and Formal Language</option>
-              <option value="Data Structures">Data Structures</option>
-              <option value="Digital Design and Componenets">Digital Design and Componenets</option>
-              <option value="Web Technology">Web Tech</option>
-            </>
-          )}
-          {Semester === "4" && (
-            <>
-              <option value="Linear Algebra">Linear Algebra</option>
-              <option value="Data Algorithms">Data Algorithms</option>
-              <option value="Operating System">Operating System</option>
-              <option value="MicroProcessor and Architecture">MicroProcessor and Architecture</option>
-              <option value="Computer Networks">Computer Networks</option>
-            </>
-          )}
-          {Semester === "6" && (
-            <>
-              <option value="Cloud Computing">Cloud Computing</option>
-              <option value="OOPS">OOPS</option>
-              <option value="Complier Design">Complier Design</option>
-              <option value="Elective1">Elective1</option>
-              <option value="Elective2">Elective2</option>
-            </>
-          )}
+          {/* Add subject options dynamically as needed */}
         </select>
       </div>
       <div>
@@ -120,6 +86,10 @@ const AdminHome = () => {
           value={price}
           onChange={(e) => setPrice(e.target.value)}
         />
+      </div>
+      <div>
+        <label>Upload File:</label>
+        <input type="file" onChange={(e) => setFile(e.target.files[0])} />
       </div>
       <button onClick={handleAddAssignment}>Add Assignment</button>
     </div>

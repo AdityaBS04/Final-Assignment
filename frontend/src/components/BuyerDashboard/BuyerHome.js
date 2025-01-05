@@ -43,11 +43,11 @@ const BuyerHome = () => {
           <option value="">Select Subject</option>
           {semester === "1" && (
             <>
-            <option value="Maths1">Maths1</option>
-            <option value="EPD">EPD</option>
-            <option value="Mechanics">Mechanical</option>
-            <option value="Python">Python</option>
-            <option value="Physics">Physics</option>
+              <option value="Maths1">Maths1</option>
+              <option value="EPD">EPD</option>
+              <option value="Mechanics">Mechanical</option>
+              <option value="Python">Python</option>
+              <option value="Physics">Physics</option>
             </>
           )}
           {semester === "2" && (
@@ -96,7 +96,17 @@ const BuyerHome = () => {
           <ul>
             {assignments.map((assignment, index) => (
               <li key={index}>
-                <strong>{assignment.assignment}</strong> - ${assignment.price}
+                <strong>{assignment.assignmentName}</strong> - ${assignment.price}
+                {assignment.fileUrl && (
+                  <a
+                    href={assignment.fileUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{ marginLeft: "10px" }}
+                  >
+                    Download
+                  </a>
+                )}
               </li>
             ))}
           </ul>
