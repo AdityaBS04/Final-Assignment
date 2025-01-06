@@ -68,8 +68,60 @@ const AdminHome = () => {
           onChange={(e) => setSubjectId(e.target.value)}
         >
           <option value="">Select Subject</option>
-          {/* Add subject options dynamically as needed */}
+          {Semester === "1" && (
+            <>
+              <option value="Maths1">Maths1</option>
+              <option value="EPD">EPD</option>
+              <option value="Mechanics">Mechanical</option>
+              <option value="Python">Python</option>
+              <option value="Physics">Physics</option>
+            </>
+          )}
+          {Semester === "2" && (
+            <>
+              <option value="Maths2">Maths2</option>
+              <option value="EEE">EEE</option>
+              <option value="Mechanical">Mechanical</option>
+              <option value="C">C</option>
+              <option value="Chemistry">Chemistry</option>
+            </>
+          )}
+          {Semester === "3" && (
+            <>
+              <option value="Statistics">SDS</option>
+              <option value="Automata and Formal Language">Automata and Formal Language</option>
+              <option value="Data Structures">Data Structures</option>
+              <option value="Digital Design and Componenets">Digital Design and Componenets</option>
+              <option value="Web Technology">Web Tech</option>
+            </>
+          )}
+          {Semester === "4" && (
+            <>
+              <option value="Linear Algebra">Linear Algebra</option>
+              <option value="Data Algorithms">Data Algorithms</option>
+              <option value="Operating System">Operating System</option>
+              <option value="MicroProcessor and Architecture">MicroProcessor and Architecture</option>
+              <option value="Computer Networks">Computer Networks</option>
+            </>
+          )}
+          {Semester === "6" && (
+            <>
+              <option value="Cloud Computing">Cloud Computing</option>
+              <option value="OOPS">OOPS</option>
+              <option value="Complier Design">Complier Design</option>
+              <option value="Elective1">Elective1</option>
+              <option value="Elective2">Elective2</option>
+            </>
+          )}
         </select>
+      </div>
+      <div>
+        <label>Assignment:</label>
+        <input
+          type="text"
+          value={assignment}
+          onChange={(e) => setAssignment(e.target.value)}
+        />
       </div>
       <div>
         <label>Assignment:</label>
