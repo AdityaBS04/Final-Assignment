@@ -1,10 +1,14 @@
-import React, { useState } from "react";
+import React, { useState} from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const BuyerHome = () => {
   const [semester, setSemester] = useState("");
-  const [subject, setSubject] = useState("");
+  const [subject, setSubjectId] = useState("");
   const [assignments, setAssignments] = useState([]);
+  const navigate = useNavigate();
+
+  const userEmail = "buyer@example.com"; // Replace with logged-in user's email in a real app
 
   const handleFetchAssignments = async () => {
     if (!semester || !subject) {
@@ -23,6 +27,20 @@ const BuyerHome = () => {
     }
   };
 
+  const handleBuyAssignment = async (assignmentId) => {
+    try {
+      await axios.post("http://localhost:5000/api/assignments/purchase-assignment", {
+        userEmail,
+        assignmentId,
+      });
+      alert("Assignment purchased successfully!");
+      navigate("/thank-you"); // Navigate to a default page
+    } catch (error) {
+      console.error("Error purchasing assignment:", error.response?.data || error.message);
+      alert("Failed to purchase assignment.");
+    }
+  };
+
   return (
     <div>
       <h1>Buyer Dashboard</h1>
@@ -30,6 +48,7 @@ const BuyerHome = () => {
         <label>Semester:</label>
         <select value={semester} onChange={(e) => setSemester(e.target.value)}>
           <option value="">Select Semester</option>
+          {/* Add semester options as needed */}
           <option value="1">Semester 1</option>
           <option value="2">Semester 2</option>
           <option value="3">Semester 3</option>
@@ -39,7 +58,10 @@ const BuyerHome = () => {
       </div>
       <div>
         <label>Subject:</label>
-        <select value={subject} onChange={(e) => setSubject(e.target.value)}>
+        <select
+          value={subject}
+          onChange={(e) => setSubjectId(e.target.value)}
+        >
           <option value="">Select Subject</option>
           {semester === "1" && (
             <>
@@ -93,23 +115,25 @@ const BuyerHome = () => {
       <div>
         <h2>Assignments</h2>
         {assignments.length > 0 ? (
-          <ul>
-            {assignments.map((assignment, index) => (
-              <li key={index}>
-                <strong>{assignment.assignmentName}</strong> - ${assignment.price}
-                {assignment.fileUrl && (
-                  <a
-                    href={assignment.fileUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    style={{ marginLeft: "10px" }}
-                  >
-                    Download
-                  </a>
-                )}
-              </li>
+          <div style={{ display: "flex", flexWrap: "wrap" }}>
+            {assignments.map((assignment) => (
+              <div
+                key={assignment.assignmentId}
+                style={{
+                  border: "1px solid #ccc",
+                  padding: "10px",
+                  margin: "10px",
+                  width: "200px",
+                }}
+              >
+                <h3>{assignment.assignmentName}</h3>
+                <p>Price: ${assignment.price}</p>
+                <button onClick={() => handleBuyAssignment(assignment.assignmentId)}>
+                  Buy
+                </button>
+              </div>
             ))}
-          </ul>
+          </div>
         ) : (
           <p>No assignments found for the selected subject.</p>
         )}
