@@ -124,14 +124,6 @@ const AdminHome = () => {
         />
       </div>
       <div>
-        <label>Assignment:</label>
-        <input
-          type="text"
-          value={assignment}
-          onChange={(e) => setAssignment(e.target.value)}
-        />
-      </div>
-      <div>
         <label>Price:</label>
         <input
           type="number"
