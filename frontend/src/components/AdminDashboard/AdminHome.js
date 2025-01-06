@@ -48,9 +48,9 @@ const AdminHome = () => {
   };
 
   return (
-    <div>
+    <div style={{ padding: "20px" }}>
       <h1>Admin Dashboard</h1>
-      <div>
+      <div style={{ marginBottom: "10px" }}>
         <label>Semester:</label>
         <select value={Semester} onChange={(e) => setSemester(e.target.value)}>
           <option value="">Select Semester</option>
@@ -61,7 +61,7 @@ const AdminHome = () => {
           <option value="6">Semester 6</option>
         </select>
       </div>
-      <div>
+      <div style={{ marginBottom: "10px" }}>
         <label>Subject:</label>
         <select
           value={SubjectId}
@@ -72,7 +72,7 @@ const AdminHome = () => {
             <>
               <option value="Maths1">Maths1</option>
               <option value="EPD">EPD</option>
-              <option value="Mechanics">Mechanical</option>
+              <option value="Mechanics">Mechanics</option>
               <option value="Python">Python</option>
               <option value="Physics">Physics</option>
             </>
@@ -88,11 +88,13 @@ const AdminHome = () => {
           )}
           {Semester === "3" && (
             <>
-              <option value="Statistics">SDS</option>
-              <option value="Automata and Formal Language">Automata and Formal Language</option>
+              <option value="Statistics">Statistics</option>
+              <option value="Automata and Formal Language">Automata</option>
               <option value="Data Structures">Data Structures</option>
-              <option value="Digital Design and Componenets">Digital Design and Componenets</option>
-              <option value="Web Technology">Web Tech</option>
+              <option value="Digital Design and Components">
+                Digital Design
+              </option>
+              <option value="Web Technology">Web Technology</option>
             </>
           )}
           {Semester === "4" && (
@@ -100,7 +102,9 @@ const AdminHome = () => {
               <option value="Linear Algebra">Linear Algebra</option>
               <option value="Data Algorithms">Data Algorithms</option>
               <option value="Operating System">Operating System</option>
-              <option value="MicroProcessor and Architecture">MicroProcessor and Architecture</option>
+              <option value="MicroProcessor and Architecture">
+                MicroProcessor
+              </option>
               <option value="Computer Networks">Computer Networks</option>
             </>
           )}
@@ -108,22 +112,22 @@ const AdminHome = () => {
             <>
               <option value="Cloud Computing">Cloud Computing</option>
               <option value="OOPS">OOPS</option>
-              <option value="Complier Design">Complier Design</option>
+              <option value="Compiler Design">Compiler Design</option>
               <option value="Elective1">Elective1</option>
               <option value="Elective2">Elective2</option>
             </>
           )}
         </select>
       </div>
-      <div>
-        <label>Assignment:</label>
+      <div style={{ marginBottom: "10px" }}>
+        <label>Assignment Name:</label>
         <input
           type="text"
           value={assignment}
           onChange={(e) => setAssignment(e.target.value)}
         />
       </div>
-      <div>
+      <div style={{ marginBottom: "10px" }}>
         <label>Price:</label>
         <input
           type="number"
@@ -131,7 +135,7 @@ const AdminHome = () => {
           onChange={(e) => setPrice(e.target.value)}
         />
       </div>
-      <div>
+      <div style={{ marginBottom: "10px" }}>
         <label>Upload File:</label>
         <input type="file" onChange={(e) => setFile(e.target.files[0])} />
       </div>
