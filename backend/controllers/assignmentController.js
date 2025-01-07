@@ -40,11 +40,11 @@ const getAssignments = async (req, res) => {
 };
 
 const purchaseAssignment = async (req, res) => {
-  const { userEmail, assignmentId } = req.body;
+  const { userEmail, assignmentId, price, assignmentName } = req.body;
 
   try {
-    if (!userEmail || !assignmentId) {
-      return res.status(400).json({ message: "User email and Assignment ID are required." });
+    if (!userEmail || !assignmentId || !price || !assignmentName) {
+      return res.status(400).json({ message: "User email, Assignment ID, price, and assignment name are required." });
     }
 
     const params = {
@@ -52,7 +52,9 @@ const purchaseAssignment = async (req, res) => {
       Item: {
         userEmail,
         assignmentId,
+        assignmentName,
         purchaseDate: new Date().toISOString(),
+        price,
       },
     };
 
@@ -66,3 +68,4 @@ const purchaseAssignment = async (req, res) => {
 };
 
 module.exports = { getAssignments, purchaseAssignment };
+

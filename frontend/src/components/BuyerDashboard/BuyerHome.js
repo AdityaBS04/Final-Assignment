@@ -1,4 +1,4 @@
-import React, { useState} from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
@@ -27,11 +27,13 @@ const BuyerHome = () => {
     }
   };
 
-  const handleBuyAssignment = async (assignmentId) => {
+  const handleBuyAssignment = async (assignmentId, price, assignmentName) => {
     try {
       await axios.post("http://localhost:5000/api/assignments/purchase-assignment", {
         userEmail,
         assignmentId,
+        price,
+        assignmentName,
       });
       alert("Assignment purchased successfully!");
       navigate("/thank-you"); // Navigate to a default page
@@ -58,10 +60,7 @@ const BuyerHome = () => {
       </div>
       <div>
         <label>Subject:</label>
-        <select
-          value={subject}
-          onChange={(e) => setSubjectId(e.target.value)}
-        >
+        <select value={subject} onChange={(e) => setSubjectId(e.target.value)}>
           <option value="">Select Subject</option>
           {semester === "1" && (
             <>
@@ -128,7 +127,11 @@ const BuyerHome = () => {
               >
                 <h3>{assignment.assignmentName}</h3>
                 <p>Price: ${assignment.price}</p>
-                <button onClick={() => handleBuyAssignment(assignment.assignmentId)}>
+                <button
+                  onClick={() =>
+                    handleBuyAssignment(assignment.assignmentId, assignment.price, assignment.assignmentName)
+                  }
+                >
                   Buy
                 </button>
               </div>
