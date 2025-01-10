@@ -67,5 +67,29 @@ const purchaseAssignment = async (req, res) => {
   }
 };
 
-module.exports = { getAssignments, purchaseAssignment };
+const Razorpay = require("razorpay");
+
+const razorpay = new Razorpay({
+  key_id: process.env.RAZORPAY_KEY_ID,
+  key_secret: process.env.RAZORPAY_KEY_SECRET,
+});
+
+const createOrder = async (req, res) => {
+  const { amount } = req.body; // Amount in paise
+  try {
+    const order = await razorpay.orders.create({
+      amount, // Amount in the smallest currency unit (e.g., paise for INR)
+      currency: "INR",
+      receipt: `receipt_${Date.now()}`,
+    });
+    res.status(200).json(order);
+  } catch (error) {
+    console.error("Error creating Razorpay order:", error);
+    res.status(500).json({ message: "Failed to create Razorpay order." });
+  }
+};
+
+
+
+module.exports = { getAssignments, purchaseAssignment,createOrder };
 

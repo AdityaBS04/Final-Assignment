@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
@@ -9,6 +9,26 @@ const BuyerHome = () => {
   const navigate = useNavigate();
 
   const userEmail = "buyer@example.com"; // Replace with logged-in user's email in a real app
+
+  // Load the Razorpay script dynamically
+  useEffect(() => {
+    const loadRazorpayScript = () => {
+      if (!document.querySelector('script[src="https://checkout.razorpay.com/v1/checkout.js"]')) {
+        const script = document.createElement("script");
+        script.src = "https://checkout.razorpay.com/v1/checkout.js";
+        script.async = true;
+        script.onload = () => {
+          console.log("Razorpay script loaded");
+        };
+        script.onerror = () => {
+          console.error("Failed to load Razorpay script");
+        };
+        document.body.appendChild(script);
+      }
+    };
+
+    loadRazorpayScript();
+  }, []);
 
   const handleFetchAssignments = async () => {
     if (!semester || !subject) {
@@ -29,23 +49,67 @@ const BuyerHome = () => {
 
   const handleBuyAssignment = async (assignmentId, price, assignmentName) => {
     try {
-      await axios.post("http://localhost:5000/api/assignments/purchase-assignment", {
-        userEmail,
+      // Check if Razorpay is available
+      if (typeof window.Razorpay === "undefined") {
+        alert("Razorpay SDK not loaded. Please refresh the page.");
+        return;
+      }
+
+      // Create an order on the backend
+      const orderResponse = await axios.post("http://localhost:5000/api/payment/create-order", {
+        amount: price * 100, // Razorpay expects the amount in paise (INR * 100)
         assignmentId,
-        price,
         assignmentName,
+        userEmail,
       });
-      alert("Assignment purchased successfully!");
-      navigate("/thank-you"); // Navigate to a default page
+
+      const { order } = orderResponse.data;
+
+      // Open Razorpay payment gateway
+      const options = {
+        key: "rzp_test_f0vYM20dHpb0QA", // Replace with your Razorpay Key ID
+        amount: order.amount,
+        currency: order.currency,
+        name: "Assignment Purchase",
+        description: `Purchase ${assignmentName}`,
+        order_id: order.id,
+        handler: async function (response) {
+          try {
+            // Verify payment on the backend
+            await axios.post("http://localhost:5000/api/payment/verify-payment", {
+              razorpayPaymentId: response.razorpay_payment_id,
+              razorpayOrderId: response.razorpay_order_id,
+              razorpaySignature: response.razorpay_signature,
+              assignmentId,
+              userEmail,
+            });
+            alert("Payment successful! Assignment purchased.");
+            navigate("/dashboard"); // Redirect to user's dashboard
+          } catch (error) {
+            console.error("Error verifying payment:", error.response?.data || error.message);
+            alert("Payment verification failed. Please contact support.");
+          }
+        },
+        prefill: {
+          email: userEmail,
+        },
+        theme: {
+          color: "#3399cc",
+        },
+      };
+
+      const razorpay = new window.Razorpay(options);
+      razorpay.open();
     } catch (error) {
-      console.error("Error purchasing assignment:", error.response?.data || error.message);
-      alert("Failed to purchase assignment.");
+      console.error("Error during purchase:", error.response?.data || error.message);
+      alert("Failed to initiate payment. Please try again.");
     }
   };
 
   return (
     <div>
       <h1>Buyer Dashboard</h1>
+
       <div>
         <label>Semester:</label>
         <select value={semester} onChange={(e) => setSemester(e.target.value)}>
