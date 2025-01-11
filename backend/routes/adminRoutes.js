@@ -3,10 +3,8 @@ const { addAssignmentWithFile, getAssignments, upload } = require("../controller
 
 const router = express.Router();
 
-// Route to add assignments with file upload
-router.post("/add-assignment", upload.single("file"), addAssignmentWithFile);
 
-// Route to fetch assignments by semester and subject
+router.post("/add-assignment", upload.single("file"), addAssignmentWithFile);
 router.get("/get-assignments", getAssignments);
 
 module.exports = router;

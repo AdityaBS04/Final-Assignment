@@ -35,6 +35,11 @@ const Login = () => {
       if (response.ok) {
         alert(data.message);
 
+        // Store user data in localStorage for future use
+        localStorage.setItem("token", data.token);
+        localStorage.setItem("email", formData.email); // Store the email from formData
+        localStorage.setItem("name", data.name);
+
         // Navigate based on role (admin or buyer)
         if (formData.role === "admin") navigate("/admin-home");
         else navigate("/buyer");

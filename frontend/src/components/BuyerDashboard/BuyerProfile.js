@@ -1,12 +1,78 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import { Document, Page, pdfjs } from "react-pdf";
 
-const BuyerProfile = () => {
+// Configure PDF.js worker
+pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
+
+const BuyerProfilePage = () => {
+  const [assignments, setAssignments] = useState([]);
+  const [selectedPdf, setSelectedPdf] = useState(null);
+
+  // Fetch user assignments on component mount
+  useEffect(() => {
+    const fetchAssignments = async () => {
+      const userEmail = localStorage.getItem("email"); // Retrieve email from localStorage
+
+      if (!userEmail) {
+        console.error("Email not found in localStorage.");
+        alert("Email is not available.");
+        return;
+      }
+
+      try {
+        const response = await axios.get("http://localhost:5000/api/assignments/user-assignments", {
+          params: { email: userEmail },
+        });
+        setAssignments(response.data.assignments);
+      } catch (error) {
+        console.error("Error fetching assignments:", error);
+        alert("Failed to fetch assignments.");
+      }
+    };
+    fetchAssignments();
+  }, []);
+
+  const handleViewPDF = (url) => {
+    setSelectedPdf(url);
+  };
+
   return (
     <div>
-      <h2>Buyer Profile</h2>
-      <p>Your previous purchases and accessible assignments.</p>
+      <h1>My Purchased Assignments</h1>
+      <div>
+        {assignments.length > 0 ? (
+          <ul>
+            {assignments.map((assignment) => (
+              <li key={assignment.assignmentId}>
+                {assignment.assignmentName}{" "}
+                <button onClick={() => handleViewPDF(assignment.signedUrl)}>View PDF</button>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p>No assignments found.</p>
+        )}
+      </div>
+      {selectedPdf && (
+        <div>
+          <h2>PDF Viewer</h2>
+          <div
+            style={{
+              width: "600px",
+              height: "800px",
+              border: "1px solid black",
+              overflow: "hidden",
+            }}
+          >
+            <Document file={selectedPdf}>
+              <Page pageNumber={1} />
+            </Document>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
 
-export default BuyerProfile;
+export default BuyerProfilePage;

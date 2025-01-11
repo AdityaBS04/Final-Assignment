@@ -109,7 +109,7 @@ const BuyerHome = () => {
   return (
     <div>
       <h1>Buyer Dashboard</h1>
-
+      <button onClick={() => navigate("/buyer-profile")}>Go to My Purchased Assignments</button>
       <div>
         <label>Semester:</label>
         <select value={semester} onChange={(e) => setSemester(e.target.value)}>

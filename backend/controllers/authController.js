@@ -49,17 +49,19 @@ const login = async (req, res) => {
   try {
     // Check if user exists
     const params = {
-      TableName: process.env.TABLE_NAME_USERS,
+      TableName: process.env.TABLE_NAME_USERS, // Table name from environment variables
       Key: { email },
     };
 
     const { Item } = await dynamoDb.get(params).promise();
+
+    // Check if user exists and has the correct role
     if (!Item || Item.role !== role) {
       return res.status(400).json({ message: "Invalid credentials" });
     }
 
     // Verify password
-    const isMatch = await comparePassword(password, Item.password);
+    const isMatch = await comparePassword(password, Item.password); // Compare with hashed password
     if (!isMatch) {
       return res.status(400).json({ message: "Invalid credentials" });
     }
@@ -67,11 +69,18 @@ const login = async (req, res) => {
     // Generate JWT
     const token = jwt.sign({ email, role }, process.env.JWT_SECRET, { expiresIn: "1h" });
 
-    res.status(200).json({ message: "Login successful", token });
+    // Send response with token, email, and name
+    res.status(200).json({
+      message: "Login successful",
+      token,
+      email: Item.email,
+      name: Item.name,
+    });
   } catch (error) {
     console.error("Login error:", error);
     res.status(500).json({ message: "Error logging in" });
   }
 };
+
 
 module.exports = { signup, login };

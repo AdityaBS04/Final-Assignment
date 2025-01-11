@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import MainPage from "./components/MainPage";
 import SignupPage from "./components/SignupPage";
@@ -11,6 +11,8 @@ import BuyerHome from "./components/BuyerDashboard/BuyerHome";
 import BuyerProfile from "./components/BuyerDashboard/BuyerProfile";
 
 const App = () => {
+  const [userEmail, setUserEmail] = useState("");
+
   return (
     <Router>
       <Routes>
@@ -19,7 +21,10 @@ const App = () => {
 
         {/* Authentication Pages */}
         <Route path="/signup" element={<SignupPage />} />
-        <Route path="/login" element={<LoginPage />} />
+        <Route
+          path="/login"
+          element={<LoginPage setUserEmail={setUserEmail} />}
+        />
 
         {/* Admin Dashboard Pages */}
         <Route path="/admin-home" element={<AdminHome />} />
@@ -31,7 +36,10 @@ const App = () => {
 
         {/* Buyer Dashboard Pages */}
         <Route path="/buyer" element={<BuyerHome />} />
-        <Route path="/buyer-profile" element={<BuyerProfile />} />
+        <Route
+          path="/buyer-profile"
+          element={<BuyerProfile userEmail={userEmail} />}
+        />
       </Routes>
     </Router>
   );

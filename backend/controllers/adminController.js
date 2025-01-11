@@ -1,7 +1,7 @@
 const multer = require("multer");
 const { uploadFile } = require("../utils/s3UploadHelper");
 const dynamoDb = require("../config/dynamoDbConfig");
-const { v4: uuidv4 } = require("uuid"); // For unique assignment IDs
+const { v4: uuidv4 } = require("uuid"); 
 
 // Multer configuration for file uploads
 const upload = multer({ storage: multer.memoryStorage() });
