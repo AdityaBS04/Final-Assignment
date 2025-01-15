@@ -1,0 +1,41 @@
+{
+    "version": 2,
+    "builds": [
+      {
+        "src": "package.json",
+        "use": "@vercel/static-build",
+        "config": {
+          "distDir": "build"
+        }
+      },
+      {
+        "src": "api/**/*.js",
+        "use": "@vercel/node"
+      }
+    ],
+    "routes": [
+      {
+        "src": "/api/(.*)",
+        "dest": "/api/$1"
+      },
+      {
+        "src": "/(.*)",
+        "dest": "/index.html"
+      }
+    ],
+    "env": {
+      "AWS_ACCESS_KEY_ID": "@aws_access_key_id",
+      "AWS_SECRET_ACCESS_KEY": "@aws_secret_access_key",
+      "AWS_REGION": "@aws_region",
+      "JWT_SECRET": "@jwt_secret",
+      "TABLE_NAME_USERS": "@table_name_users",
+      "TABLE_NAME_ASSIGNMENTS": "@table_name_assignments",
+      "S3_BUCKET_NAME": "@s3_bucket_name",
+      "TABLE_NAME_USER_ASSIGNMENTS": "@table_name_user_assignments",
+      "ASSIGNMENTS_GSI": "@assignments_gsi",
+      "RAZORPAY_KEY_ID": "@razorpay_key_id",
+      "RAZORPAY_KEY_SECRET": "@razorpay_key_secret",
+      "ASSIGNEMNTID_GSI": "@assignemntid_gsi"
+    }
+  }
+  
