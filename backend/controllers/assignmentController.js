@@ -153,17 +153,25 @@ const fetchUserAssignments = async (req, res) => {
     const signedAssignments = await Promise.all(
       assignments.map(async (assignment) => {
         try {
-          // Use the bucket name from the .env file
           const bucketName = process.env.S3_BUCKET_NAME;
     
-          if (!bucketName || !assignment.fileLink) {
-            throw new Error("Missing bucket name or file path.");
+          // Ensure the fileLink contains only the S3 object key
+
+          const fileKey = assignment.fileLink.replace(
+            "https://assignment-files-bucket.s3.ap-south-1.amazonaws.com/",
+            ""
+          );
+          
+          
+          if (!bucketName || !fileKey) {
+            throw new Error("Missing bucket name or file key.");
           }
     
-          // Generate signed URL for S3 file
+          // Generate signed URL
           const signedUrl = await s3.getSignedUrlPromise("getObject", {
             Bucket: bucketName, // Bucket name from .env
-            Key: assignment.fileLink, // File path from assignment data 
+            Key: fileKey,       // Use the object key (not a full URL)
+            Expires: 900,       // URL validity duration in seconds (15 minutes)
           });
     
           return { ...assignment, signedUrl }; // Append signedUrl to the assignment object
@@ -176,6 +184,7 @@ const fetchUserAssignments = async (req, res) => {
         }
       })
     );
+    
     
 
     res.status(200).json({ assignments: signedAssignments });
