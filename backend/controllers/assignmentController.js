@@ -171,7 +171,7 @@ const fetchUserAssignments = async (req, res) => {
           const signedUrl = await s3.getSignedUrlPromise("getObject", {
             Bucket: bucketName, // Bucket name from .env
             Key: fileKey,       // Use the object key (not a full URL)
-            Expires: 86400,       // URL validity duration in seconds (15 minutes)
+            Expires: 900,       // URL validity duration in seconds (15 minutes)
           });
     
           return { ...assignment, signedUrl }; // Append signedUrl to the assignment object
