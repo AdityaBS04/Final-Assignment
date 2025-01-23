@@ -37,7 +37,7 @@ const BuyerHome = () => {
     }
 
     try {
-      const response = await axios.get("http://localhost:5000/api/assignments/get-assignments", {
+      const response = await axios.get("https://pdut3urkc4.execute-api.ap-south-1.amazonaws.com/api/assignments/get-assignments", {
         params: { Semester: semester, SubjectId: subject },
       });
       setAssignments(response.data.assignments);
