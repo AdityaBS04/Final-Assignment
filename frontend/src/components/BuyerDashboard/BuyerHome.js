@@ -37,7 +37,7 @@ const BuyerHome = () => {
     }
 
     try {
-      const response = await axios.get("http://localhost:5000/api/assignments/get-assignments", {
+      const response = await axios.get("https://99pcw0nqn9.execute-api.ap-south-1.amazonaws.com/api/assignments/get-assignments", {
         params: { Semester: semester, SubjectId: subject },
       });
       setAssignments(response.data.assignments);
@@ -56,7 +56,7 @@ const BuyerHome = () => {
       }
 
       // Create an order on the backend
-      const orderResponse = await axios.post("http://localhost:5000/api/payment/create-order", {
+      const orderResponse = await axios.post("https://99pcw0nqn9.execute-api.ap-south-1.amazonaws.com/api/payment/create-order", {
         amount: price * 100, // Razorpay expects the amount in paise (INR * 100)
         assignmentId,
         assignmentName,
@@ -76,7 +76,7 @@ const BuyerHome = () => {
         handler: async function (response) {
           try {
             // Verify payment on the backend
-            await axios.post("http://localhost:5000/api/payment/verify-payment", {
+            await axios.post("https://99pcw0nqn9.execute-api.ap-south-1.amazonaws.com/api/payment/verify-payment", {
               razorpayPaymentId: response.razorpay_payment_id,
               razorpayOrderId: response.razorpay_order_id,
               razorpaySignature: response.razorpay_signature,

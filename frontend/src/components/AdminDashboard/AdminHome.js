@@ -23,7 +23,7 @@ const AdminHome = () => {
       formData.append("file", file);
 
       const response = await axios.post(
-        "http://localhost:5000/api/admin/add-assignment",
+        "https://99pcw0nqn9.execute-api.ap-south-1.amazonaws.com/api/admin/add-assignment",
         formData,
         {
           headers: {
