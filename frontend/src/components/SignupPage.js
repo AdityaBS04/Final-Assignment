@@ -25,7 +25,7 @@ const Signup = () => {
     }
 
     try {
-      const response = await fetch("https://99pcw0nqn9.execute-api.ap-south-1.amazonaws.com/api/auth/signup", {
+      const response = await fetch("http://99pcw0nqn9.execute-api.ap-south-1.amazonaws.com/api/auth/signup", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

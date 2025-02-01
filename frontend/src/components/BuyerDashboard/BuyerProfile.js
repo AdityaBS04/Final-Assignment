@@ -19,7 +19,7 @@ const BuyerProfilePage = () => {
       try {
         // Make API request to fetch user assignments
         const response = await axios.get(
-          "https://99pcw0nqn9.execute-api.ap-south-1.amazonaws.com/api/assignments/user-assignments",
+          "http://99pcw0nqn9.execute-api.ap-south-1.amazonaws.com/api/assignments/user-assignments",
           {
             params: { email: userEmail },
           }
